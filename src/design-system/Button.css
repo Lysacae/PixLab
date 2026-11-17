@@ -1,0 +1,119 @@
+.px-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 4px 12px;
+  font-family: var(--font-display);
+  font-size: 8px;
+  line-height: 1.2;
+  color: var(--parchemin);
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-hard);
+  image-rendering: pixelated;
+  transition: none;
+}
+
+.px-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.px-btn--primary {
+  background: var(--rose-pixel);
+  border-color: var(--ivoire);
+  border-top-color: var(--blanc-chaud);
+  border-left-color: var(--blanc-chaud);
+  border-bottom-color: var(--ombre);
+  border-right-color: var(--ombre);
+}
+
+.px-btn--primary:hover:not(:disabled) {
+  background: var(--rose-clair);
+}
+
+.px-btn--primary:active:not(:disabled) {
+  border-top-color: var(--ombre);
+  border-left-color: var(--ombre);
+  border-bottom-color: var(--blanc-chaud);
+  border-right-color: var(--blanc-chaud);
+}
+
+.px-btn--secondary {
+  background: var(--prune-sombre);
+  border-color: var(--ivoire);
+  color: var(--parchemin);
+}
+
+.px-btn--secondary:hover:not(:disabled) {
+  background: var(--prune);
+}
+
+.px-btn--tool {
+  width: 100%;
+  justify-content: flex-start;
+  background: var(--prune-sombre);
+  border-color: transparent;
+  box-shadow: none;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  min-height: 36px;
+  padding: 6px 8px;
+}
+
+.px-btn--tool.is-selected {
+  background: var(--prune);
+  border-color: var(--cyan);
+}
+
+.px-btn--tool:hover:not(:disabled):not(.is-selected) {
+  background: var(--prune);
+}
+
+.px-btn--danger {
+  background: var(--rouge);
+  border-color: var(--ivoire);
+  border-top-color: var(--blanc-chaud);
+  border-left-color: var(--blanc-chaud);
+  border-bottom-color: var(--ombre);
+  border-right-color: var(--ombre);
+}
+
+.px-btn--danger:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.px-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  min-height: 24px;
+  padding: 4px;
+}
+
+.px-btn--ghost.is-selected {
+  border-color: var(--or);
+  background: var(--prune);
+}
+
+.px-btn.is-disabled,
+.px-btn:disabled {
+  background: var(--gris-pierre);
+  color: var(--sable);
+  border-color: var(--gris-pierre);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.px-btn__icon {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.px-btn__icon svg {
+  width: 24px;
+  height: 24px;
+}

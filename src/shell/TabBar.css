@@ -1,0 +1,76 @@
+.tabbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 40px;
+  padding: 0 8px;
+  background: var(--encre);
+  border-bottom: 2px solid var(--prune);
+  flex-shrink: 0;
+}
+
+.tabbar__tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 0;
+  overflow: visible;
+  height: 100%;
+}
+
+.tabbar__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  background: var(--prune-sombre);
+  color: var(--sable);
+  border: 2px solid transparent;
+  font-family: var(--font-display);
+  font-size: 8px;
+}
+
+.tabbar__tab svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tabbar__tab.is-active {
+  background: var(--prune);
+  color: var(--parchemin);
+  border-color: var(--prune);
+}
+
+.tabbar__tab.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 4px;
+  background: var(--tab-accent, var(--cyan));
+}
+
+.tabbar__badge {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: var(--orange);
+  color: var(--encre);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.tabbar__render {
+  flex-shrink: 0;
+}
+
+.tabbar__render-spacer {
+  width: 96px;
+  flex-shrink: 0;
+}

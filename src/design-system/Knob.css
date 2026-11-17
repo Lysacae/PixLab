@@ -1,0 +1,55 @@
+.px-knob {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.px-knob__label {
+  font-family: var(--font-display);
+  font-size: 8px;
+  color: var(--or);
+}
+
+.px-knob__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.px-knob__dial {
+  width: 48px;
+  height: 48px;
+  border-radius: 0;
+  background: var(--bronze);
+  border: 2px solid var(--ivoire);
+  border-bottom-color: var(--ombre);
+  border-right-color: var(--ombre);
+  display: grid;
+  place-items: center;
+  cursor: ns-resize;
+}
+
+.px-knob__disc {
+  width: 36px;
+  height: 36px;
+  background: var(--puits);
+  border: 2px solid var(--ombre);
+  position: relative;
+}
+
+.px-knob__notch {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 4px;
+  height: 12px;
+  margin-left: -2px;
+  background: var(--ivoire);
+  transform-origin: 50% 14px;
+}
+
+.px-knob__value {
+  color: var(--parchemin);
+  font-size: 16px;
+  min-width: 48px;
+}

@@ -1,0 +1,143 @@
+.titlebar {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  background: var(--prune-sombre);
+  border-bottom: 2px solid var(--ombre);
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+
+.titlebar__drag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.titlebar__logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+.titlebar__icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+}
+
+.titlebar__brand {
+  font-size: 8px;
+  color: var(--parchemin);
+  text-shadow: 1px 1px 0 var(--ombre);
+}
+
+.titlebar__project {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--sable);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titlebar__controls {
+  display: flex;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+.titlebar__btn {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ivoire);
+  border-top-color: var(--blanc-chaud);
+  border-left-color: var(--blanc-chaud);
+  border-bottom-color: var(--ombre);
+  border-right-color: var(--ombre);
+  box-shadow: 2px 2px 0 0 var(--ombre);
+  display: grid;
+  place-items: center;
+}
+
+.titlebar__btn:hover {
+  filter: brightness(1.08);
+}
+
+.titlebar__btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+  border-top-color: var(--ombre);
+  border-left-color: var(--ombre);
+  border-bottom-color: var(--blanc-chaud);
+  border-right-color: var(--blanc-chaud);
+}
+
+.titlebar__btn--min {
+  background: var(--bronze);
+}
+
+.titlebar__btn--max {
+  background: var(--vert-phosphor);
+}
+
+.titlebar__btn--close {
+  background: var(--rouge);
+}
+
+.titlebar__glyph {
+  display: block;
+  image-rendering: pixelated;
+}
+
+.titlebar__glyph--min {
+  width: 10px;
+  height: 2px;
+  background: var(--encre);
+  margin-top: 6px;
+}
+
+.titlebar__glyph--max {
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--encre);
+  background: transparent;
+}
+
+.titlebar__glyph--close {
+  width: 10px;
+  height: 10px;
+  position: relative;
+}
+
+.titlebar__glyph--close::before,
+.titlebar__glyph--close::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  width: 2px;
+  height: 10px;
+  background: var(--blanc-chaud);
+}
+
+.titlebar__glyph--close::before {
+  transform: rotate(45deg);
+}
+
+.titlebar__glyph--close::after {
+  transform: rotate(-45deg);
+}

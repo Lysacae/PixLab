@@ -1,0 +1,14 @@
+PIXLAB 0.2.0
+=============
+
+- Upscale Real-ESRGAN / Real-CUGAN (nettete neuronale reelle)
+- Zoom molette + pan maintien clic dans preview Image
+- Cadre noir video + navigation clic molette
+- Trim bords clips timeline (image / video / audio)
+- Texte editable et deplacable dans la preview
+- Presets export HD / 2K / 4K + resolution manuelle
+- Marqueurs aimant plus leger
+- Popup Nouveau projet (format, ratio, nom)
+- File rendu : retirer un job sans supprimer le fichier PC
+- Export WAV musique reel + waveform corrigee
+- Systeme de mise a jour GitHub (installer + portable)

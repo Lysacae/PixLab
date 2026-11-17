@@ -1,0 +1,17 @@
+.px-keycap {
+  min-width: 72px;
+  height: 28px;
+  padding: 0 8px;
+  background: var(--prune);
+  color: var(--parchemin);
+  border: 2px solid var(--ivoire);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  box-shadow: 2px 2px 0 0 var(--ombre);
+}
+
+.px-keycap.is-editing {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 0 2px var(--cyan);
+}

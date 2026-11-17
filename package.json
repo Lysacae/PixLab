@@ -1,0 +1,111 @@
+{
+  "name": "pixlab",
+  "private": true,
+  "version": "0.2.0",
+  "description": "PIXLAB — montage vidéo, image et musique en pixel art",
+  "author": "PIXLAB",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "cursors": "node scripts/gen-cursors.mjs",
+    "icon": "node scripts/make-icon-png.mjs",
+    "postinstall": "node scripts/gen-cursors.mjs",
+    "dist": "npm run icon && npm run build && electron-builder --win",
+    "dist:portable": "npm run icon && npm run build && electron-builder --win portable",
+    "dist:installer": "npm run icon && npm run build && electron-builder --win nsis",
+    "dist:dir": "npm run icon && npm run build && electron-builder --win dir"
+  },
+  "build": {
+    "appId": "com.pixlab.app",
+    "productName": "PIXLAB",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "public/splashart.jpg",
+        "to": "splashart.jpg"
+      },
+      {
+        "from": "public/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "asar": true,
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "PIXLAB-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PIXLAB",
+      "uninstallDisplayName": "PIXLAB",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "include": "build/installer.nsh"
+    },
+    "portable": {
+      "artifactName": "PIXLAB-${version}-portable.exe"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Lysacae",
+        "repo": "pixlab"
+      }
+    ]
+  },
+  "dependencies": {
+    "@plotdb/upscaler": "^0.0.5",
+    "@tensorflow/tfjs": "^4.22.0",
+    "electron-updater": "^6.8.11",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "electron": "^36.2.0",
+    "electron-builder": "^26.0.12",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.35.5",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6"
+  }
+}
