@@ -2,6 +2,7 @@ node_modules/
 dist/
 dist-electron/
 release/
+release-v02/
 *.exe
 *.blockmap
 *.local
