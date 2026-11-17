@@ -1,0 +1,113 @@
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #05040a;
+  display: grid;
+  place-items: center;
+}
+
+.confirm-modal__card {
+  width: min(440px, 92%);
+  background: var(--prune-sombre);
+  border: 2px solid var(--ivoire);
+  border-bottom-color: var(--bronze);
+  border-right-color: var(--bronze);
+  box-shadow: var(--shadow-hard);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.confirm-modal__card h2 {
+  font-size: 8px;
+  color: var(--parchemin);
+}
+
+.confirm-modal__card p {
+  color: var(--sable);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.confirm-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.confirm-modal__card--wide {
+  width: min(560px, 94%);
+}
+
+.np-label {
+  font-family: var(--font-display);
+  font-size: 7px;
+  color: var(--or);
+}
+
+.np-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.np-presets button {
+  padding: 6px 8px;
+  background: var(--prune);
+  border: 2px solid var(--bronze);
+  color: var(--parchemin);
+  font-size: 11px;
+}
+
+.np-presets button.is-on {
+  border-color: var(--or);
+  color: var(--or);
+}
+
+.np-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.np-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--sable);
+  font-size: 11px;
+}
+
+.np-input {
+  width: 88px;
+  padding: 6px;
+  background: var(--puits);
+  border: 2px solid var(--ombre);
+  color: var(--parchemin);
+}
+
+.np-x {
+  color: var(--sable);
+  padding-bottom: 8px;
+}
+
+.np-summary {
+  color: var(--cyan);
+  font-size: 12px;
+}
+
+.update-notes {
+  max-height: 180px;
+  overflow: auto;
+  padding: 8px;
+  background: var(--puits);
+  border: 2px solid var(--ombre);
+  color: var(--parchemin);
+  font-size: 12px;
+  white-space: pre-wrap;
+  margin: 0;
+}

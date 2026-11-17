@@ -1,0 +1,70 @@
+.menubar {
+  display: flex;
+  align-items: stretch;
+  height: 24px;
+  padding: 0 4px;
+  background: var(--prune);
+  border-bottom: 2px solid var(--ombre);
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+  position: relative;
+  z-index: 20;
+}
+
+.menubar__item {
+  position: relative;
+}
+
+.menubar__item > button {
+  height: 100%;
+  padding: 0 10px;
+  color: var(--parchemin);
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.menubar__item > button.is-open,
+.menubar__item > button:hover {
+  background: var(--prune-sombre);
+  color: var(--cyan);
+}
+
+.menubar__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: var(--prune-sombre);
+  border: 2px solid var(--ivoire);
+  border-top: none;
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+}
+
+.menubar__dropdown button {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 8px 12px;
+  color: var(--parchemin);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  text-align: left;
+}
+
+.menubar__dropdown button:hover {
+  background: var(--prune);
+  color: var(--cyan);
+}
+
+.menubar__sc {
+  color: var(--sable);
+}
+
+.menubar__sep {
+  height: 2px;
+  background: var(--ombre);
+  margin: 2px 0;
+}

@@ -1,0 +1,21 @@
+.px-chip {
+  min-width: 48px;
+  height: 28px;
+  padding: 0 8px;
+  background: var(--prune-sombre);
+  color: var(--sable);
+  border: 2px solid var(--bronze);
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.px-chip:hover {
+  color: var(--parchemin);
+  border-color: var(--ivoire);
+}
+
+.px-chip.is-selected {
+  background: var(--prune);
+  color: var(--violet-magie);
+  border-color: var(--violet-magie);
+}

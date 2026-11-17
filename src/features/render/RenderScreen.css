@@ -1,0 +1,138 @@
+.render-screen {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.render-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+}
+
+.render-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  background: var(--prune);
+  border: 2px solid transparent;
+  text-align: left;
+  color: inherit;
+}
+
+.render-row.is-selected {
+  border-color: var(--orange);
+}
+
+.render-thumb {
+  width: 48px;
+  height: 48px;
+  background: var(--puits);
+  border: 2px solid var(--bronze);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.render-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.render-thumb--music {
+  background: var(--puits);
+}
+
+.render-thumb--video span,
+.render-thumb--image span {
+  width: 28px;
+  height: 20px;
+  background: var(--orange);
+  display: block;
+}
+
+.render-thumb--image span {
+  background: var(--violet-magie);
+  height: 28px;
+  width: 22px;
+}
+
+.render-row__name {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--parchemin);
+}
+
+.render-row__src {
+  color: var(--sable);
+  font-size: 12px;
+  margin: 2px 0 6px;
+}
+
+.render-done {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.render-screen__details .px-panel__body {
+  gap: 12px;
+}
+
+.render-details-thumb {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+  background: var(--puits);
+  border: 2px solid var(--ombre);
+  border-bottom-color: var(--ivoire);
+  border-right-color: var(--ivoire);
+}
+
+.render-details-thumb .render-thumb {
+  width: 96px;
+  height: 96px;
+}
+
+.render-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.render-details div {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 8px;
+}
+
+.render-details dt {
+  color: var(--sable);
+}
+
+.render-details dd {
+  color: var(--parchemin);
+  font-family: var(--font-mono);
+  font-size: 16px;
+}
+
+.render-details-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.render-note {
+  color: var(--sable);
+  font-size: 12px;
+}

@@ -1,0 +1,124 @@
+@import './fonts.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--encre);
+  color: var(--parchemin);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: url('/cursors/arrow.png') 0 0, default;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  text-rendering: optimizeSpeed;
+  user-select: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: inherit;
+}
+
+input,
+textarea {
+  cursor: url('/cursors/ibeam.png') 4 8, text;
+  user-select: text;
+}
+
+img,
+canvas,
+video,
+svg,
+.pixel {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.preview-zoom-zone {
+  cursor: url('/cursors/loupe.png') 6 6, zoom-in;
+}
+
+.app-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--encre);
+}
+
+.display-font {
+  font-family: var(--font-display);
+  font-size: 8px;
+  letter-spacing: 0;
+}
+
+.ui-font {
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.mono-font {
+  font-family: var(--font-mono);
+  font-size: 16px;
+}
+
+/* Scrollbars pixel */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bronze) var(--puits);
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--puits);
+  border: 2px solid var(--ombre);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--bronze);
+  border: 2px solid var(--ivoire);
+  box-shadow: inset -2px -2px 0 var(--ombre), inset 2px 2px 0 var(--blanc-chaud);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--sable);
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--puits);
+}

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-electron/
+release/
+*.exe
+*.blockmap
+*.local
+.DS_Store
+Thumbs.db
+.env*
+.vscode/

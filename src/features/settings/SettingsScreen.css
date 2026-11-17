@@ -1,0 +1,136 @@
+.settings-screen {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+}
+
+.settings-screen__cats .px-panel__body {
+  gap: 4px;
+}
+
+.settings-screen__main .px-panel__body {
+  gap: 12px;
+  overflow: hidden;
+}
+
+.settings-sub {
+  color: var(--sable);
+  font-size: 12px;
+}
+
+.settings-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.settings-group h3 {
+  font-family: var(--font-display);
+  font-size: 8px;
+  color: var(--or);
+  margin-bottom: 8px;
+}
+
+.settings-group ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-group li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 8px;
+  background: var(--prune);
+  border: 2px solid var(--ombre);
+}
+
+.settings-bind {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-edit-hint {
+  color: var(--cyan);
+  font-family: var(--font-ui);
+}
+
+.settings-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.settings-scale {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.scale-chip {
+  min-width: 48px;
+  height: 32px;
+  background: var(--prune-sombre);
+  border: 2px solid var(--bronze);
+  color: var(--sable);
+  font-family: var(--font-display);
+  font-size: 8px;
+}
+
+.scale-chip.is-on {
+  border-color: var(--ivoire);
+  color: var(--parchemin);
+  background: var(--prune);
+}
+
+.settings-about {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-about__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-modal {
+  position: absolute;
+  inset: 0;
+  background: #05040a;
+  display: grid;
+  place-items: center;
+  z-index: 10;
+}
+
+.settings-modal__card {
+  width: min(420px, 90%);
+  background: var(--prune-sombre);
+  border: 2px solid var(--ivoire);
+  border-bottom-color: var(--bronze);
+  border-right-color: var(--bronze);
+  box-shadow: var(--shadow-hard);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

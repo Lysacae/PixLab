@@ -1,0 +1,36 @@
+:root {
+  /* Palette exclusive — 19 couleurs */
+  --encre: #0e0c16;
+  --prune-sombre: #1c1730;
+  --prune: #261f3d;
+  --puits: #12101c;
+  --ivoire: #e8dcc8;
+  --bronze: #8b7a63;
+  --parchemin: #f5efe0;
+  --sable: #9a8f7a;
+  --rose-pixel: #ff5a7a;
+  --rose-clair: #ff8aa0;
+  --vert-phosphor: #5eff9f;
+  --cyan: #5ec8ff;
+  --or: #ffc857;
+  --violet-magie: #c77dff;
+  --orange: #ff9f43;
+  --gris-pierre: #4a4560;
+  --rouge: #e83b3b;
+  --ombre: #05040a;
+  --blanc-chaud: #fff8ee;
+
+  --accent-video: var(--cyan);
+  --accent-image: var(--violet-magie);
+  --accent-musique: var(--or);
+  --accent-rendu: var(--orange);
+  --accent-parametres: var(--ivoire);
+
+  --font-display: 'Press Start 2P', monospace;
+  --font-ui: 'Silkscreen', monospace;
+  --font-mono: 'VT323', monospace;
+
+  --grid: 4px;
+  --chrome: 8px;
+  --shadow-hard: 4px 4px 0 0 var(--ombre);
+}
