@@ -28,10 +28,13 @@
 }
 
 .splash__overlay {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  bottom: max(28px, 6vh);
+  transform: translateX(-50%);
   z-index: 1;
   width: min(520px, 90%);
-  margin-top: min(38vh, 280px);
+  margin-top: 0;
   padding: 16px;
   background: var(--prune-sombre);
   border: 2px solid var(--ivoire);

@@ -3,6 +3,7 @@ dist/
 dist-electron/
 release/
 release-v02/
+release-v021/
 *.exe
 *.blockmap
 *.local

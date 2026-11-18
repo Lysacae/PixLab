@@ -48,6 +48,8 @@ export function SettingsScreen() {
   const findConflict = useShortcutsStore((s) => s.findConflict);
   const uiScale = useUiStore((s) => s.uiScale);
   const setUiScale = useUiStore((s) => s.setUiScale);
+  const theme = useUiStore((s) => s.theme);
+  const setTheme = useUiStore((s) => s.setTheme);
   const autoSave = useUiStore((s) => s.autoSave);
   const setAutoSave = useUiStore((s) => s.setAutoSave);
   const autoSaveIntervalSec = useUiStore((s) => s.autoSaveIntervalSec);
@@ -154,6 +156,23 @@ export function SettingsScreen() {
 
         {cat === 'appearance' ? (
           <div className="settings-appearance">
+            <p className="settings-sub">Theme</p>
+            <div className="settings-scale">
+              <button
+                type="button"
+                className={['scale-chip', theme === 'dark' ? 'is-on' : ''].join(' ')}
+                onClick={() => setTheme('dark')}
+              >
+                Sombre
+              </button>
+              <button
+                type="button"
+                className={['scale-chip', theme === 'light' ? 'is-on' : ''].join(' ')}
+                onClick={() => setTheme('light')}
+              >
+                Clair
+              </button>
+            </div>
             <p className="settings-sub">Facteur d&apos;echelle de la fenetre (entiers uniquement).</p>
             <div className="settings-scale">
               {([1, 2, 3, 4] as const).map((s) => (

@@ -16,7 +16,12 @@ import { useProjectStore } from '@/stores/projectStore';
 import { useLibraryStore } from '@/stores/libraryStore';
 import { bootstrapRenderQueue, useRenderQueueStore } from '@/stores/renderQueueStore';
 import { eventMatchesCombo, useShortcutsStore } from '@/stores/shortcutsStore';
-import { downloadProjectFile, loadProjectLocal, saveProjectLocal } from '@/stores/persist';
+import {
+  loadProjectLocal,
+  openProjectFromPxlFile,
+  saveProjectLocal,
+  saveProjectToPxlFile,
+} from '@/stores/persist';
 import { resolveExportFilePath } from '@/lib/exportPath';
 import { importMedia } from '@/stubs/importMedia';
 import type { MediaAsset } from '@/stores/types';
@@ -50,10 +55,19 @@ export function AppShell() {
   const [updateDownloading, setUpdateDownloading] = useState(false);
   const [updateProgress, setUpdateProgress] = useState(0);
 
-  const doSave = useCallback(() => {
+  const doSave = useCallback(async () => {
     saveProjectLocal();
-    downloadProjectFile();
-    setStatusText(`Projet sauvegarde — ${useProjectStore.getState().projectName}.pxl`);
+    try {
+      const path = await saveProjectToPxlFile();
+      if (path) setStatusText(`Projet sauvegarde — ${path}`);
+    } catch (e) {
+      setStatusText(`Erreur sauvegarde .pxl — ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }, [setStatusText]);
+
+  const doOpen = useCallback(async () => {
+    const ok = await openProjectFromPxlFile();
+    if (ok) setStatusText(`Projet ouvert — ${useProjectStore.getState().projectName}.pxl`);
   }, [setStatusText]);
 
   const requestClose = useCallback(() => {
@@ -94,7 +108,7 @@ export function AppShell() {
     const offDone = api.onUpdateDownloaded?.(() => {
       setUpdateDownloading(false);
       setUpdateProgress(100);
-      // Propose l'install immediate via le meme dialogue (bouton Installer)
+      void api.quitAndInstall?.();
     });
     void api.checkForUpdates();
     return () => {
@@ -217,6 +231,7 @@ export function AppShell() {
         fileName: `${project.projectName}`,
       });
       if (!outputPath) return;
+      const lib = useLibraryStore.getState().items;
       enqueue({
         projectName: project.projectName,
         source: 'video',
@@ -225,6 +240,17 @@ export function AppShell() {
         durationLabel: formatTimecode(project.duration()).slice(3),
         outputPath,
         sourceUrl: project.videoAsset?.objectUrl ?? null,
+        videoMeta: {
+          width: project.videoWidth,
+          height: project.videoHeight,
+          durationSec: Math.max(0.5, project.duration()),
+          fps: project.videoFps || 30,
+          videoAsset: project.videoAsset,
+          clips: project.clips,
+          tracks: project.tracks,
+          library: lib,
+          mutedSource: project.mutedSource,
+        },
       });
       setTab('render');
     } else if (tab === 'image') {
@@ -284,6 +310,9 @@ export function AppShell() {
       case 'new':
         setNewProjectOpen(true);
         break;
+      case 'open':
+        void doOpen();
+        break;
       case 'importVideo':
         pickFile('video/*', 'video');
         break;
@@ -294,7 +323,7 @@ export function AppShell() {
         pickFile('audio/*', 'music');
         break;
       case 'save':
-        doSave();
+        void doSave();
         break;
       case 'render':
         if (tab === 'render') break;
@@ -350,8 +379,26 @@ export function AppShell() {
         onMenu('new');
         return;
       }
+      if (e.ctrlKey && e.key.toLowerCase() === 'o') {
+        e.preventDefault();
+        void doOpen();
+        return;
+      }
+      if (e.ctrlKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        void doSave();
+        return;
+      }
 
       if (tab === 'video') {
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+          const id = project.selectedClipId;
+          if (id) {
+            e.preventDefault();
+            project.removeClip(id);
+          }
+          return;
+        }
         if (match('playPause', 'video')) {
           e.preventDefault();
           project.togglePlay();

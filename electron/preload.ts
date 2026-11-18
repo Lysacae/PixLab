@@ -23,6 +23,12 @@ export type PixlabApi = {
     defaultPath?: string;
     filters?: { name: string; extensions: string[] }[];
   }) => Promise<string | null>;
+  pickOpenFile: (opts: {
+    filters?: { name: string; extensions: string[] }[];
+  }) => Promise<string | null>;
+  readTextFile: (
+    filePath: string,
+  ) => Promise<{ ok: true; text: string } | { ok: false; error: string }>;
   pathJoin: (...parts: string[]) => Promise<string>;
   getDefaultExportDir: () => Promise<string>;
   checkForUpdates: () => Promise<void>;
@@ -50,6 +56,8 @@ const api: PixlabApi = {
     ipcRenderer.invoke('fs:writeFile', filePath, base64),
   pickDirectory: (defaultPath?: string) => ipcRenderer.invoke('dialog:pickDirectory', defaultPath),
   pickSaveFile: (opts) => ipcRenderer.invoke('dialog:pickSaveFile', opts),
+  pickOpenFile: (opts) => ipcRenderer.invoke('dialog:pickOpenFile', opts),
+  readTextFile: (filePath: string) => ipcRenderer.invoke('fs:readTextFile', filePath),
   pathJoin: (...parts: string[]) => ipcRenderer.invoke('path:join', parts),
   getDefaultExportDir: () => ipcRenderer.invoke('fs:defaultExportDir'),
   checkForUpdates: () => ipcRenderer.invoke('updater:check'),

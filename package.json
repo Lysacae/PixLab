@@ -1,7 +1,7 @@
 {
   "name": "pixlab",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "PIXLAB — montage vidéo, image et musique en pixel art",
   "author": "PIXLAB",
   "main": "dist-electron/main.js",
@@ -22,7 +22,7 @@
     "appId": "com.pixlab.app",
     "productName": "PIXLAB",
     "directories": {
-      "output": "release-v02"
+      "output": "release-v021"
     },
     "files": [
       "dist/**/*",

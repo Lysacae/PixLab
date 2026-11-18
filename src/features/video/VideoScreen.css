@@ -9,10 +9,19 @@
 }
 
 .video-screen__left {
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+}
+
+.video-screen__format,
+.video-screen__lib,
+.video-screen__tools {
+  flex-shrink: 0;
 }
 
 .video-screen__tools .px-panel__body {
@@ -269,24 +278,43 @@
   z-index: 3;
 }
 
-.video-format-list {
+.video-format-roller {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
-.video-format-list button {
-  text-align: left;
-  padding: 6px 8px;
-  background: var(--prune);
-  border: 2px solid transparent;
+.video-format-select {
+  width: 100%;
+  padding: 8px;
+  background: var(--puits);
+  border: 2px solid var(--ivoire);
+  border-bottom-color: var(--bronze);
+  border-right-color: var(--bronze);
   color: var(--parchemin);
+  font-family: var(--font-ui);
   font-size: 12px;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--violet-magie) 50%),
+    linear-gradient(135deg, var(--violet-magie) 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) calc(50% - 2px),
+    calc(100% - 10px) calc(50% - 2px);
+  background-size:
+    6px 6px,
+    6px 6px;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 
-.video-format-list button.is-on,
-.video-format-list button:hover {
-  border-color: var(--or);
+.video-format-select:focus {
+  outline: 2px solid var(--violet-magie);
+  outline-offset: 1px;
+}
+
+.video-format-select option {
+  background: var(--prune-sombre);
+  color: var(--parchemin);
 }
 
 .timeline-toolbar {
