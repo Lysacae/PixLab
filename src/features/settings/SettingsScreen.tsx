@@ -275,7 +275,7 @@ export function SettingsScreen() {
               <img src={iconUrl} alt="" width={48} height={48} style={{ imageRendering: 'pixelated' }} />
               <span className="display-font">PIXLAB</span>
             </div>
-            <p>Version 0.1.0 — UI pixel art</p>
+            <p>Version 1.0.3 — UI pixel art</p>
             <p className="settings-sub">Montage video, image et musique.</p>
           </div>
         ) : null}
