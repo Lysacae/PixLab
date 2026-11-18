@@ -1,14 +1,54 @@
-PIXLAB 0.2.1
+PIXLAB 1.0.3
 =============
 
-- Splash : barre de chargement descendue (logo visible)
-- Rendu video : fichier video reel (copie source ou WebM)
-- Colonne gauche scrollable (plus de boutons coupes)
-- Preset format en rouleau (select DA)
-- Cadre preview noir = ratio export, sans texte
-- Touche Suppr : supprimer clip timeline
-- Theme clair (violet primaire, meme DA)
-- Projets .pxl (ouvrir / enregistrer avec medias)
-- Mise a jour GitHub automatique
+## Nouvelles fonctionnalites
+- Theme clair (Paramètres → Apparence), violet primaire, meme DA
+- Projets .pxl : ouvrir / enregistrer avec medias embarques
+- Preset format video en rouleau (select)
+- Touche Suppr : supprimer un clip de la timeline
+- Cadre preview noir selon le ratio d'export choisi
+- Mise a jour automatique via GitHub (installer + portable)
 
-Test update : ouvrir PIXLAB-0.2.0-portable.exe → detecte 0.2.1
+## Corrections de bugs
+- Barre de splash descendue : le logo n'est plus cache
+- Rendu video : fichier video reel (plus de fichier corrompu)
+- Boutons Format Export / Bibliotheque : colonne scrollable (plus de disparition au resize)
+- Texte inutile retire du cadre noir de preview
+
+---
+
+## Historique des versions precedentes
+
+### 1.0.2 (ex 0.2.0)
+#### Nouvelles fonctionnalites
+- Upscale Real-ESRGAN / Real-CUGAN
+- Zoom molette + pan maintien clic (Image)
+- Cadre video + navigation clic molette
+- Trim bords clips timeline
+- Texte editable / deplacable dans la preview
+- Presets export HD / 2K / 4K + resolution manuelle
+- Marqueurs timeline + aimant
+- Popup Nouveau projet
+- Systeme de mise a jour GitHub
+
+#### Corrections de bugs
+- Export WAV musique reel
+- Waveform musique corrigee
+- Audio timeline video (plus de coupe/relance)
+- Nom de sortie image respecte a l'export
+
+### 1.0.1 (ex 0.1.x)
+#### Nouvelles fonctionnalites
+- Application Electron PIXLAB (Video / Image / Musique / Rendu)
+- UI pixel art selon SPEC
+- Timeline, bibliotheque, file de rendu
+- Installateur NSIS + version portable
+
+#### Corrections de bugs
+- Premiers correctifs fenetre, splash, assets
+
+---
+
+Fichiers :
+- Installateur : PIXLAB-Setup-1.0.3.exe
+- Portable     : PIXLAB-1.0.3-portable.exe
