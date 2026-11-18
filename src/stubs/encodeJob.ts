@@ -1,7 +1,9 @@
 import { writeExportFromUrl } from '@/lib/exportPath';
+import { copyVideoSourceBase64, renderTimelineToWebm } from '@/lib/videoEncode';
 import { renderMusicToWav } from '@/lib/wavEncode';
 import type { AudioFxState } from '@/stubs/audioFx';
 import type { RenderJob, RenderSource } from '@/stores/types';
+import type { VideoEncodeMeta } from '@/stubs/encodeJobMeta';
 
 function uid() {
   return `job_${Math.random().toString(36).slice(2, 10)}`;
@@ -14,6 +16,8 @@ function todayLabel() {
   return `${dd}/${mm}`;
 }
 
+export type { VideoEncodeMeta } from '@/stubs/encodeJobMeta';
+
 export function createRenderJob(input: {
   projectName: string;
   source: RenderSource;
@@ -23,6 +27,7 @@ export function createRenderJob(input: {
   outputPath: string;
   sourceUrl?: string | null;
   audioFx?: AudioFxState | null;
+  videoMeta?: VideoEncodeMeta | null;
 }): RenderJob {
   return {
     id: uid(),
@@ -37,8 +42,14 @@ export function createRenderJob(input: {
     outputPath: input.outputPath,
     sourceUrl: input.sourceUrl ?? input.thumbnailUrl,
     audioFx: input.audioFx ?? null,
+    videoMeta: input.videoMeta ?? null,
     error: null,
   };
+}
+
+function ensureExt(path: string, ext: string) {
+  const clean = path.replace(/\.(mp4|webm|mov|avi)$/i, '');
+  return `${clean}.${ext}`;
 }
 
 export function runStubEncode(
@@ -88,28 +99,61 @@ export function runStubEncode(
       return;
     }
 
-    // Video stub — fichier placeholder lisible en texte
-    if (api) {
-      const note = `PIXLAB video export stub\nproject=${job.projectName}\n`;
-      const b64 = btoa(note);
-      const written = await api.writeFile(job.outputPath, b64);
+    // VIDEO — fichier conteneur reel (WebM VP8/VP9) lisible par le lecteur Windows
+    try {
+      if (!api) {
+        onDone({ ok: false, error: 'API Electron indisponible' });
+        return;
+      }
+      const meta = job.videoMeta;
+      let base64: string;
+      let outPath = job.outputPath;
+
+      const hasOverlays =
+        !!meta &&
+        (meta.clips.some((c) => c.text || meta.tracks.find((t) => t.id === c.track)?.kind === 'images') ||
+          !meta.videoAsset);
+
+      if (meta && (hasOverlays || !meta.videoAsset?.objectUrl)) {
+        const encoded = await renderTimelineToWebm({
+          ...meta,
+          onProgress: (p) => onProgress(Math.min(95, 20 + Math.round(p * 0.75))),
+        });
+        base64 = encoded.base64;
+        outPath = ensureExt(job.outputPath, 'webm');
+      } else if (job.sourceUrl || meta?.videoAsset?.objectUrl) {
+        onProgress(30);
+        const src = job.sourceUrl || meta!.videoAsset!.objectUrl;
+        base64 = await copyVideoSourceBase64(src);
+        // conserve l'extension d'origine si possible
+        const m = src.match(/\.(mp4|webm|mov)/i);
+        if (m) outPath = ensureExt(job.outputPath, m[1].toLowerCase());
+        else outPath = ensureExt(job.outputPath, 'mp4');
+        onProgress(90);
+      } else {
+        onDone({ ok: false, error: 'Aucune source video' });
+        return;
+      }
+
+      const written = await api.writeFile(outPath, base64);
       onDone(written.ok ? { ok: true, path: written.path } : written);
-      return;
+    } catch (e) {
+      onDone({ ok: false, error: e instanceof Error ? e.message : String(e) });
     }
-    onDone({ ok: true, path: job.outputPath });
   };
 
   const timer = window.setInterval(() => {
     if (cancelled) return;
-    pct = Math.min(job.source === 'music' ? 35 : 100, pct + 6 + Math.floor(Math.random() * 8));
+    const cap = job.source === 'music' || job.source === 'video' ? 18 : 100;
+    pct = Math.min(cap, pct + 5 + Math.floor(Math.random() * 6));
     onProgress(pct);
-    if (pct >= (job.source === 'music' ? 35 : 100)) {
+    if (pct >= cap) {
       window.clearInterval(timer);
       void finish().then(() => {
         if (!cancelled) onProgress(100);
       });
     }
-  }, 160);
+  }, 140);
 
   return () => {
     cancelled = true;

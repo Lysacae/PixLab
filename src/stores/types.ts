@@ -104,6 +104,17 @@ export type RenderJob = {
   sourceUrl?: string | null;
   error?: string | null;
   audioFx?: import('@/stubs/audioFx').AudioFxState | null;
+  videoMeta?: {
+    width: number;
+    height: number;
+    durationSec: number;
+    fps: number;
+    videoAsset: MediaAsset | null;
+    clips: TimelineClip[];
+    tracks: TimelineTrack[];
+    library: MediaAsset[];
+    mutedSource: boolean;
+  } | null;
 };
 
 export type VideoExportPreset = {

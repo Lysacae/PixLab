@@ -33,7 +33,7 @@ export function UpdateDialog({ info, downloading, progress = 0, onInstall, onLat
             Plus tard
           </Button>
           <Button variant="primary" onClick={onInstall} disabled={downloading}>
-            Installer
+            {downloading ? 'Telechargement…' : 'Installer la mise a jour'}
           </Button>
         </div>
       </div>

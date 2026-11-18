@@ -531,24 +531,30 @@ export function VideoScreen({ onImport, onImportAudio, onImportImage }: Props) {
         </Panel>
 
         <Panel title="FORMAT EXPORT" className="video-screen__format">
-          <div className="video-format-list">
-            {EXPORT_PRESETS.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                className={videoWidth === p.w && videoHeight === p.h ? 'is-on' : ''}
-                onClick={() => {
-                  setVideoExportFormat(p.format);
-                  setVideoCanvas(p.w, p.h);
-                  setCustomW(p.w);
-                  setCustomH(p.h);
-                }}
-              >
-                {p.label}
-                <span className="mono-font"> {p.w}x{p.h}</span>
-              </button>
-            ))}
-          </div>
+          <label className="video-format-roller">
+            <span className="video-empty-hint">Preset</span>
+            <select
+              className="video-format-select"
+              value={
+                EXPORT_PRESETS.find((p) => p.w === videoWidth && p.h === videoHeight)?.id ?? 'custom'
+              }
+              onChange={(e) => {
+                const p = EXPORT_PRESETS.find((x) => x.id === e.target.value);
+                if (!p) return;
+                setVideoExportFormat(p.format);
+                setVideoCanvas(p.w, p.h);
+                setCustomW(p.w);
+                setCustomH(p.h);
+              }}
+            >
+              {EXPORT_PRESETS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label} — {p.w}x{p.h}
+                </option>
+              ))}
+              <option value="custom">Personnalise — {customW}x{customH}</option>
+            </select>
+          </label>
           <div className="video-res-custom">
             <span className="video-empty-hint">Resolution manuelle</span>
             <div className="video-res-row">
@@ -647,14 +653,7 @@ export function VideoScreen({ onImport, onImportAudio, onImportImage }: Props) {
                       preload="auto"
                       draggable={false}
                     />
-                  ) : (
-                    <div className="video-preview__empty">
-                      <span>{canPreview ? `${videoWidth}x${videoHeight}` : 'Aucun media'}</span>
-                      <span className="video-empty-hint">
-                        Clic molette = naviguer · objets = rendu
-                      </span>
-                    </div>
-                  )}
+                  ) : null}
 
                   {visualOverlays.map((c) => {
                     const asset = c.assetId ? libraryById.get(c.assetId) : null;

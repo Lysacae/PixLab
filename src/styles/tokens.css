@@ -34,3 +34,27 @@
   --chrome: 8px;
   --shadow-hard: 4px 4px 0 0 var(--ombre);
 }
+
+/* Theme clair — meme DA, violet primaire */
+[data-theme='light'] {
+  --encre: #f3eef8;
+  --prune-sombre: #ebe3f5;
+  --prune: #e0d4f0;
+  --puits: #faf7ff;
+  --ivoire: #3a2f55;
+  --bronze: #7a6a9a;
+  --parchemin: #2a2040;
+  --sable: #6a5a80;
+  --rose-pixel: #d94a6a;
+  --rose-clair: #e87898;
+  --vert-phosphor: #2fbf70;
+  --cyan: #3a9fd4;
+  --or: #c99420;
+  --violet-magie: #8b4dff;
+  --orange: #e88920;
+  --gris-pierre: #b8aec8;
+  --rouge: #d03040;
+  --ombre: #c9bdd8;
+  --blanc-chaud: #2a2040;
+  --shadow-hard: 4px 4px 0 0 var(--ombre);
+}

@@ -3,6 +3,7 @@ import './MenuBar.css';
 
 export type MenuAction =
   | 'new'
+  | 'open'
   | 'importVideo'
   | 'importImage'
   | 'importAudio'
@@ -27,12 +28,13 @@ const MENUS: {
     label: 'Fichier',
     items: [
       { id: 'new', label: 'Nouveau projet', shortcut: 'Ctrl+N' },
+      { id: 'open', label: 'Ouvrir projet…', shortcut: 'Ctrl+O' },
       { id: 'sep' },
       { id: 'importVideo', label: 'Importer video…', shortcut: 'Ctrl+I' },
       { id: 'importImage', label: 'Importer image…' },
       { id: 'importAudio', label: 'Importer audio…' },
       { id: 'sep' },
-      { id: 'save', label: 'Enregistrer', shortcut: 'Ctrl+S' },
+      { id: 'save', label: 'Enregistrer (.pxl)', shortcut: 'Ctrl+S' },
       { id: 'render', label: 'Rendre', shortcut: 'Ctrl+R' },
       { id: 'sep' },
       { id: 'quit', label: 'Quitter', shortcut: 'Alt+F4' },

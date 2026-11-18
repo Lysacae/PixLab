@@ -2,10 +2,12 @@ import { create } from 'zustand';
 import type { AppTab } from './types';
 
 export type ExportPathMode = 'ask' | 'fixed';
+export type ThemeMode = 'dark' | 'light';
 
 type UiState = {
   tab: AppTab;
   uiScale: 1 | 2 | 3 | 4;
+  theme: ThemeMode;
   statusText: string;
   autoSave: boolean;
   autoSaveIntervalSec: number;
@@ -13,6 +15,7 @@ type UiState = {
   exportDir: string;
   setTab: (tab: AppTab) => void;
   setUiScale: (scale: 1 | 2 | 3 | 4) => void;
+  setTheme: (theme: ThemeMode) => void;
   setStatusText: (text: string) => void;
   setAutoSave: (v: boolean) => void;
   setAutoSaveIntervalSec: (sec: number) => void;
@@ -26,10 +29,18 @@ const savedInterval = Number(localStorage.getItem('pixlab.autoSaveInterval') || 
 const savedExportMode = (localStorage.getItem('pixlab.exportPathMode') || 'ask') as ExportPathMode;
 const savedExportDir =
   localStorage.getItem('pixlab.exportDir') || 'C:\\Users\\Public\\PIXLAB\\exports';
+const savedTheme = (localStorage.getItem('pixlab.theme') || 'dark') as ThemeMode;
+
+function applyTheme(theme: ThemeMode) {
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 
 export const useUiStore = create<UiState>((set) => ({
   tab: 'video',
   uiScale: [1, 2, 3, 4].includes(savedScale) ? savedScale : 1,
+  theme: savedTheme === 'light' ? 'light' : 'dark',
   statusText: 'Sans_titre.pxl',
   autoSave: savedAuto,
   autoSaveIntervalSec: Number.isFinite(savedInterval) ? Math.max(15, savedInterval) : 60,
@@ -40,6 +51,11 @@ export const useUiStore = create<UiState>((set) => ({
     localStorage.setItem('pixlab.uiScale', String(uiScale));
     void window.pixlab?.setScale(uiScale);
     set({ uiScale });
+  },
+  setTheme: (theme) => {
+    localStorage.setItem('pixlab.theme', theme);
+    applyTheme(theme);
+    set({ theme });
   },
   setStatusText: (statusText) => set({ statusText }),
   setAutoSave: (autoSave) => {

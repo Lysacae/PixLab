@@ -15,6 +15,7 @@ type State = {
     outputPath: string;
     sourceUrl?: string | null;
     audioFx?: import('@/stubs/audioFx').AudioFxState | null;
+    videoMeta?: import('@/stubs/encodeJobMeta').VideoEncodeMeta | null;
   }) => string;
   select: (id: string) => void;
   cancel: (id: string) => void;

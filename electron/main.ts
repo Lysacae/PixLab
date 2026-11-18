@@ -185,6 +185,29 @@ ipcMain.handle(
 
 ipcMain.handle('path:join', (_event, parts: string[]) => path.join(...parts));
 
+ipcMain.handle(
+  'dialog:pickOpenFile',
+  async (_event, opts: { filters?: { name: string; extensions: string[] }[] }) => {
+    const win = BrowserWindow.getFocusedWindow() ?? mainWindow;
+    const result = await dialog.showOpenDialog(win ?? undefined!, {
+      title: 'Ouvrir un projet PIXLAB',
+      properties: ['openFile'],
+      filters: opts?.filters ?? [{ name: 'Projet PIXLAB', extensions: ['pxl'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return null;
+    return result.filePaths[0];
+  },
+);
+
+ipcMain.handle('fs:readTextFile', async (_event, filePath: string) => {
+  try {
+    const text = await fs.promises.readFile(filePath, 'utf8');
+    return { ok: true as const, text };
+  } catch (e) {
+    return { ok: false as const, error: e instanceof Error ? e.message : String(e) };
+  }
+});
+
 // --- Auto-update (GitHub Releases) ---
 let updaterReady = false;
 async function setupUpdater() {
