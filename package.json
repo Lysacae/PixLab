@@ -1,7 +1,7 @@
 {
   "name": "pixlab",
   "private": true,
-  "version": "0.2.1",
+  "version": "1.0.3",
   "description": "PIXLAB — montage vidéo, image et musique en pixel art",
   "author": "PIXLAB",
   "main": "dist-electron/main.js",
@@ -22,7 +22,7 @@
     "appId": "com.pixlab.app",
     "productName": "PIXLAB",
     "directories": {
-      "output": "release-v021"
+      "output": "release"
     },
     "files": [
       "dist/**/*",
@@ -74,7 +74,8 @@
       "uninstallDisplayName": "PIXLAB",
       "deleteAppDataOnUninstall": false,
       "runAfterFinish": true,
-      "include": "build/installer.nsh"
+      "include": "build/installer.nsh",
+      "artifactName": "PIXLAB-Setup-${version}.${ext}"
     },
     "portable": {
       "artifactName": "PIXLAB-${version}-portable.exe"
