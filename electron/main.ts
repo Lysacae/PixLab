@@ -208,8 +208,35 @@ ipcMain.handle('fs:readTextFile', async (_event, filePath: string) => {
   }
 });
 
-// --- Auto-update (GitHub Releases) ---
+ipcMain.handle('shell:openExternal', async (_event, url: string) => {
+  try {
+    if (!/^https?:\/\//i.test(url)) {
+      return { ok: false as const, error: 'URL invalide' };
+    }
+    await shell.openExternal(url);
+    return { ok: true as const };
+  } catch (e) {
+    return { ok: false as const, error: e instanceof Error ? e.message : String(e) };
+  }
+});
+
+// --- Auto-update (GitHub Releases) — meme logique UX que CodeFlow ---
+type UpdateCheckResult =
+  | { status: 'available'; version: string; releaseNotes: string }
+  | { status: 'uptodate'; version: string }
+  | { status: 'dev' }
+  | { status: 'error'; error: string };
+
 let updaterReady = false;
+
+function releaseNotesOf(info: { releaseNotes?: string | { note: string }[] | null }) {
+  if (typeof info.releaseNotes === 'string') return info.releaseNotes;
+  if (Array.isArray(info.releaseNotes)) {
+    return info.releaseNotes.map((n) => (typeof n === 'string' ? n : n.note)).join('\n');
+  }
+  return 'Corrections et ameliorations.';
+}
+
 async function setupUpdater() {
   if (process.env.VITE_DEV_SERVER_URL) return;
   try {
@@ -218,15 +245,9 @@ async function setupUpdater() {
     autoUpdater.autoInstallOnAppQuit = true;
 
     autoUpdater.on('update-available', (info) => {
-      const notes =
-        typeof info.releaseNotes === 'string'
-          ? info.releaseNotes
-          : Array.isArray(info.releaseNotes)
-            ? info.releaseNotes.map((n) => (typeof n === 'string' ? n : n.note)).join('\n')
-            : 'Corrections et ameliorations.';
       mainWindow?.webContents.send('updater:available', {
         version: info.version,
-        releaseNotes: notes,
+        releaseNotes: releaseNotesOf(info),
       });
     });
 
@@ -244,14 +265,42 @@ async function setupUpdater() {
   }
 }
 
-ipcMain.handle('updater:check', async () => {
+ipcMain.handle('updater:check', async (): Promise<UpdateCheckResult> => {
+  if (process.env.VITE_DEV_SERVER_URL) return { status: 'dev' };
   if (!updaterReady) await setupUpdater();
-  if (!updaterReady) return;
+  if (!updaterReady) return { status: 'error', error: 'Updater indisponible' };
+
   try {
     const { autoUpdater } = await import('electron-updater');
-    await autoUpdater.checkForUpdates();
+    return await new Promise<UpdateCheckResult>((resolve) => {
+      const done = (result: UpdateCheckResult) => {
+        autoUpdater.removeListener('update-available', onAvail);
+        autoUpdater.removeListener('update-not-available', onNot);
+        autoUpdater.removeListener('error', onErr);
+        resolve(result);
+      };
+      const onAvail = (info: { version: string; releaseNotes?: string | { note: string }[] | null }) => {
+        done({
+          status: 'available',
+          version: info.version,
+          releaseNotes: releaseNotesOf(info),
+        });
+      };
+      const onNot = (info: { version: string }) => {
+        done({ status: 'uptodate', version: info.version });
+      };
+      const onErr = (err: Error) => {
+        done({ status: 'error', error: err.message || String(err) });
+      };
+      autoUpdater.once('update-available', onAvail);
+      autoUpdater.once('update-not-available', onNot);
+      autoUpdater.once('error', onErr);
+      void autoUpdater.checkForUpdates().catch((e: unknown) => {
+        onErr(e instanceof Error ? e : new Error(String(e)));
+      });
+    });
   } catch (e) {
-    console.warn('[PIXLAB] checkForUpdates', e);
+    return { status: 'error', error: e instanceof Error ? e.message : String(e) };
   }
 });
 

@@ -5,6 +5,7 @@ import { TabBar } from './TabBar';
 import { StatusBar } from './StatusBar';
 import { ConfirmDialog } from './ConfirmDialog';
 import { NewProjectDialog, type NewProjectParams } from './NewProjectDialog';
+import { APP_VERSION } from '@/lib/version';
 import { UpdateDialog, type UpdateInfo } from './UpdateDialog';
 import { VideoScreen } from '@/features/video/VideoScreen';
 import { ImageScreen } from '@/features/image/ImageScreen';
@@ -95,12 +96,15 @@ export function AppShell() {
   useEffect(() => {
     const api = window.pixlab;
     if (!api?.checkForUpdates) return;
-    const offAvail = api.onUpdateAvailable?.((info) => {
+
+    const showUpdate = (info: { version: string; releaseNotes?: string }) => {
       setUpdateInfo({
         version: info.version,
         releaseNotes: info.releaseNotes || 'Corrections et ameliorations.',
       });
-    });
+    };
+
+    const offAvail = api.onUpdateAvailable?.((info) => showUpdate(info));
     const offProg = api.onUpdateProgress?.((pct) => {
       setUpdateDownloading(true);
       setUpdateProgress(pct);
@@ -110,11 +114,21 @@ export function AppShell() {
       setUpdateProgress(100);
       void api.quitAndInstall?.();
     });
-    void api.checkForUpdates();
+    const onManual = (e: Event) => {
+      const detail = (e as CustomEvent<{ version: string; releaseNotes: string }>).detail;
+      if (detail?.version) showUpdate(detail);
+    };
+    window.addEventListener('pixlab:update-available', onManual);
+
+    void api.checkForUpdates().then((result) => {
+      if (result?.status === 'available') showUpdate(result);
+    });
+
     return () => {
       offAvail?.();
       offProg?.();
       offDone?.();
+      window.removeEventListener('pixlab:update-available', onManual);
     };
   }, []);
 
@@ -333,10 +347,12 @@ export function AppShell() {
         requestClose();
         break;
       case 'settings':
-      case 'help':
+        useUiStore.getState().setSettingsCategory('shortcuts');
         setTab('settings');
         break;
+      case 'help':
       case 'about':
+        useUiStore.getState().setSettingsCategory('help');
         setTab('settings');
         break;
       default:
@@ -538,6 +554,7 @@ export function AppShell() {
       {updateInfo ? (
         <UpdateDialog
           info={updateInfo}
+          currentVersion={APP_VERSION}
           downloading={updateDownloading}
           progress={updateProgress}
           onLater={() => setUpdateInfo(null)}

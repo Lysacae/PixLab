@@ -13,17 +13,20 @@ import {
   useShortcutsStore,
 } from '@/stores/shortcutsStore';
 import { iconUrl } from '@/assets/brand';
-import { useUiStore } from '@/stores/uiStore';
+import { useUiStore, type SettingsCategory } from '@/stores/uiStore';
 import type { ShortcutBinding } from '@/stores/types';
+import { APP_VERSION } from '@/lib/version';
 import './SettingsScreen.css';
 
-type Category = 'shortcuts' | 'appearance' | 'general' | 'about';
+const GITHUB_URL = 'https://github.com/Lysacae';
+const GITHUB_REPO = 'https://github.com/Lysacae/PixLab';
+const DISCORD_USER = 'lysaceae';
 
-const CATS: { id: Category; label: string; icon: ReactNode }[] = [
+const CATS: { id: SettingsCategory; label: string; icon: ReactNode }[] = [
   { id: 'shortcuts', label: 'Raccourcis', icon: <IconFolder /> },
   { id: 'appearance', label: 'Apparence', icon: <IconBrush /> },
   { id: 'general', label: 'General', icon: <IconKey /> },
-  { id: 'about', label: 'A propos', icon: <IconDoc /> },
+  { id: 'help', label: 'Aide', icon: <IconDoc /> },
 ];
 
 const GROUP_LABEL: Record<string, string> = {
@@ -38,7 +41,8 @@ function keyOf(b: ShortcutBinding) {
 }
 
 export function SettingsScreen() {
-  const [cat, setCat] = useState<Category>('shortcuts');
+  const cat = useUiStore((s) => s.settingsCategory);
+  const setCat = useUiStore((s) => s.setSettingsCategory);
   const draft = useShortcutsStore((s) => s.draft);
   const editingKey = useShortcutsStore((s) => s.editingKey);
   const setEditingKey = useShortcutsStore((s) => s.setEditingKey);
@@ -63,6 +67,9 @@ export function SettingsScreen() {
     combo: string;
     other: ShortcutBinding;
   } | null>(null);
+  const [updateBusy, setUpdateBusy] = useState(false);
+  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
+  const [updateError, setUpdateError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!editingKey) return;
@@ -92,6 +99,39 @@ export function SettingsScreen() {
     items: draft.filter((b) => b.group === g),
   }));
 
+  const checkUpdates = async () => {
+    setUpdateBusy(true);
+    setUpdateMessage(null);
+    setUpdateError(null);
+    try {
+      const result = await window.pixlab?.checkForUpdates();
+      if (!result || result.status === 'dev') {
+        setUpdateMessage(`PIXLAB ${APP_VERSION} (mode developpement).`);
+        return;
+      }
+      if (result.status === 'available') {
+        setUpdateMessage(
+          `Une nouvelle version est disponible : ${result.version} (vous avez ${APP_VERSION}).`,
+        );
+        window.dispatchEvent(
+          new CustomEvent('pixlab:update-available', {
+            detail: { version: result.version, releaseNotes: result.releaseNotes },
+          }),
+        );
+        return;
+      }
+      if (result.status === 'uptodate') {
+        setUpdateMessage(`PIXLAB ${APP_VERSION} est a jour.`);
+        return;
+      }
+      setUpdateError(result.error || 'Verification impossible.');
+    } catch (e) {
+      setUpdateError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setUpdateBusy(false);
+    }
+  };
+
   return (
     <div className="settings-screen">
       <Panel title="Categories" className="settings-screen__cats">
@@ -116,46 +156,59 @@ export function SettingsScreen() {
               ? 'Apparence'
               : cat === 'general'
                 ? 'General'
-                : 'A propos'
+                : 'Aide'
         }
         className="settings-screen__main"
       >
         {cat === 'shortcuts' ? (
-          <>
-            <p className="settings-sub">Cliquez sur une touche pour la redefinir.</p>
-            <div className="settings-groups">
-              {groups.map((g) => (
-                <section key={g.id} className="settings-group">
-                  <h3>{GROUP_LABEL[g.id]}</h3>
-                  <ul>
-                    {g.items.map((b) => {
-                      const k = keyOf(b);
-                      return (
-                        <li key={k}>
-                          <span>{b.label}</span>
-                          <div className="settings-bind">
-                            <KeyCap
-                              label={b.combo}
-                              editing={editingKey === k}
-                              onClick={() => setEditingKey(k)}
-                            />
-                            <Button variant="secondary" onClick={() => setEditingKey(k)}>
-                              Modifier
-                            </Button>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </section>
-              ))}
-            </div>
-            {editingKey ? <p className="settings-edit-hint">Appuyez sur une touche…</p> : null}
-          </>
+          <div className="settings-groups">
+            {groups.map((g) => (
+              <div key={g.id} className="settings-group">
+                <h3>{GROUP_LABEL[g.id]}</h3>
+                <ul>
+                  {g.items.map((b) => {
+                    const k = keyOf(b);
+                    const editing = editingKey === k;
+                    return (
+                      <li key={k}>
+                        <span>{b.label}</span>
+                        <div className="settings-bind">
+                          {editing ? (
+                            <span className="settings-edit-hint">Appuyez sur une touche…</span>
+                          ) : (
+                            <KeyCap>{b.combo}</KeyCap>
+                          )}
+                          <Button
+                            variant="secondary"
+                            onClick={() => setEditingKey(editing ? null : k)}
+                          >
+                            {editing ? 'Annuler' : 'Modifier'}
+                          </Button>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
         ) : null}
 
         {cat === 'appearance' ? (
           <div className="settings-appearance">
+            <p className="settings-sub">Echelle UI</p>
+            <div className="settings-scale">
+              {([1, 2, 3, 4] as const).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className={['scale-chip', uiScale === s ? 'is-on' : ''].join(' ')}
+                  onClick={() => setUiScale(s)}
+                >
+                  {s}x
+                </button>
+              ))}
+            </div>
             <p className="settings-sub">Theme</p>
             <div className="settings-scale">
               <button
@@ -171,28 +224,6 @@ export function SettingsScreen() {
                 onClick={() => setTheme('light')}
               >
                 Clair
-              </button>
-            </div>
-            <p className="settings-sub">Facteur d&apos;echelle de la fenetre (entiers uniquement).</p>
-            <div className="settings-scale">
-              {([1, 2, 3, 4] as const).map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  className={['scale-chip', uiScale === s ? 'is-on' : ''].join(' ')}
-                  onClick={() => setUiScale(s)}
-                >
-                  {s}x
-                </button>
-              ))}
-            </div>
-            <p className="settings-sub">Intensite CRT</p>
-            <div className="settings-scale">
-              <button type="button" className="scale-chip is-on">
-                Off
-              </button>
-              <button type="button" className="scale-chip" disabled>
-                Leger
               </button>
             </div>
           </div>
@@ -269,14 +300,40 @@ export function SettingsScreen() {
           </div>
         ) : null}
 
-        {cat === 'about' ? (
+        {cat === 'help' ? (
           <div className="settings-about">
             <div className="settings-about__brand">
               <img src={iconUrl} alt="" width={48} height={48} style={{ imageRendering: 'pixelated' }} />
               <span className="display-font">PIXLAB</span>
             </div>
-            <p>Version 1.0.3 — UI pixel art</p>
-            <p className="settings-sub">Montage video, image et musique.</p>
+            <p>Version {APP_VERSION}</p>
+            <p className="settings-sub">Auteur : Lysacae</p>
+
+            <p className="settings-sub" style={{ marginTop: 16 }}>
+              Contact
+            </p>
+            <div className="settings-scale" style={{ flexWrap: 'wrap' }}>
+              <Button variant="secondary" onClick={() => void window.pixlab?.openExternal(GITHUB_URL)}>
+                GitHub — Lysacae
+              </Button>
+              <Button variant="secondary" onClick={() => void window.pixlab?.openExternal(GITHUB_REPO)}>
+                Repo PixLab
+              </Button>
+            </div>
+            <p className="mono-font" style={{ marginTop: 8 }}>
+              Discord : {DISCORD_USER}
+            </p>
+
+            <p className="settings-sub" style={{ marginTop: 16 }}>
+              Mises a jour
+            </p>
+            <div className="settings-scale">
+              <Button variant="primary" onClick={() => void checkUpdates()} disabled={updateBusy}>
+                {updateBusy ? 'Verification…' : 'Verifier les mises a jour'}
+              </Button>
+            </div>
+            {updateMessage ? <p className="settings-sub">{updateMessage}</p> : null}
+            {updateError ? <p className="settings-update-error">{updateError}</p> : null}
           </div>
         ) : null}
 

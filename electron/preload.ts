@@ -5,6 +5,12 @@ export type UpdatePayload = {
   releaseNotes: string;
 };
 
+export type UpdateCheckResult =
+  | { status: 'available'; version: string; releaseNotes: string }
+  | { status: 'uptodate'; version: string }
+  | { status: 'dev' }
+  | { status: 'error'; error: string };
+
 export type PixlabApi = {
   minimize: () => Promise<void>;
   maximize: () => Promise<void>;
@@ -12,6 +18,7 @@ export type PixlabApi = {
   forceClose: () => Promise<void>;
   setScale: (scale: number) => Promise<number>;
   openPath: (targetPath: string) => Promise<{ ok: true } | { ok: false; error: string }>;
+  openExternal: (url: string) => Promise<{ ok: true } | { ok: false; error: string }>;
   onCloseRequested: (cb: () => void) => () => void;
   ensureDir: (dirPath: string) => Promise<{ ok: true } | { ok: false; error: string }>;
   writeFile: (
@@ -31,7 +38,7 @@ export type PixlabApi = {
   ) => Promise<{ ok: true; text: string } | { ok: false; error: string }>;
   pathJoin: (...parts: string[]) => Promise<string>;
   getDefaultExportDir: () => Promise<string>;
-  checkForUpdates: () => Promise<void>;
+  checkForUpdates: () => Promise<UpdateCheckResult>;
   downloadUpdate: () => Promise<void>;
   quitAndInstall: () => Promise<void>;
   onUpdateAvailable: (cb: (info: UpdatePayload) => void) => () => void;
@@ -46,6 +53,7 @@ const api: PixlabApi = {
   forceClose: () => ipcRenderer.invoke('window:force-close'),
   setScale: (scale: number) => ipcRenderer.invoke('window:setScale', scale),
   openPath: (targetPath: string) => ipcRenderer.invoke('shell:openPath', targetPath),
+  openExternal: (url: string) => ipcRenderer.invoke('shell:openExternal', url),
   onCloseRequested: (cb) => {
     const handler = () => cb();
     ipcRenderer.on('app:close-requested', handler);

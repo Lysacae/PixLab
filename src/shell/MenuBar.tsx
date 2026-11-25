@@ -52,8 +52,8 @@ const MENUS: {
     id: 'aide',
     label: 'Aide',
     items: [
-      { id: 'help', label: 'Raccourcis clavier' },
-      { id: 'about', label: 'A propos de PIXLAB' },
+      { id: 'help', label: 'Aide & contact' },
+      { id: 'about', label: 'A propos / Mises a jour' },
     ],
   },
 ];

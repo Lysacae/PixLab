@@ -3,9 +3,11 @@ import type { AppTab } from './types';
 
 export type ExportPathMode = 'ask' | 'fixed';
 export type ThemeMode = 'dark' | 'light';
+export type SettingsCategory = 'shortcuts' | 'appearance' | 'general' | 'help';
 
 type UiState = {
   tab: AppTab;
+  settingsCategory: SettingsCategory;
   uiScale: 1 | 2 | 3 | 4;
   theme: ThemeMode;
   statusText: string;
@@ -14,6 +16,7 @@ type UiState = {
   exportPathMode: ExportPathMode;
   exportDir: string;
   setTab: (tab: AppTab) => void;
+  setSettingsCategory: (cat: SettingsCategory) => void;
   setUiScale: (scale: 1 | 2 | 3 | 4) => void;
   setTheme: (theme: ThemeMode) => void;
   setStatusText: (text: string) => void;
@@ -39,6 +42,7 @@ applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 
 export const useUiStore = create<UiState>((set) => ({
   tab: 'video',
+  settingsCategory: 'shortcuts',
   uiScale: [1, 2, 3, 4].includes(savedScale) ? savedScale : 1,
   theme: savedTheme === 'light' ? 'light' : 'dark',
   statusText: 'Sans_titre.pxl',
@@ -47,6 +51,7 @@ export const useUiStore = create<UiState>((set) => ({
   exportPathMode: savedExportMode === 'fixed' ? 'fixed' : 'ask',
   exportDir: savedExportDir,
   setTab: (tab) => set({ tab }),
+  setSettingsCategory: (settingsCategory) => set({ settingsCategory }),
   setUiScale: (uiScale) => {
     localStorage.setItem('pixlab.uiScale', String(uiScale));
     void window.pixlab?.setScale(uiScale);

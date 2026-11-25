@@ -107,6 +107,11 @@
   gap: 12px;
 }
 
+.settings-update-error {
+  color: var(--rouge, #e85d5d);
+  font-size: 12px;
+}
+
 .settings-modal {
   position: absolute;
   inset: 0;
