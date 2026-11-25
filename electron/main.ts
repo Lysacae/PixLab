@@ -229,10 +229,14 @@ type UpdateCheckResult =
 
 let updaterReady = false;
 
-function releaseNotesOf(info: { releaseNotes?: string | { note: string }[] | null }) {
-  if (typeof info.releaseNotes === 'string') return info.releaseNotes;
-  if (Array.isArray(info.releaseNotes)) {
-    return info.releaseNotes.map((n) => (typeof n === 'string' ? n : n.note)).join('\n');
+function releaseNotesOf(info: { releaseNotes?: unknown }) {
+  const notes = info.releaseNotes;
+  if (typeof notes === 'string') return notes;
+  if (Array.isArray(notes)) {
+    return notes
+      .map((n) => (typeof n === 'string' ? n : n && typeof n === 'object' && 'note' in n ? String((n as { note: unknown }).note ?? '') : ''))
+      .filter(Boolean)
+      .join('\n');
   }
   return 'Corrections et ameliorations.';
 }
@@ -279,7 +283,7 @@ ipcMain.handle('updater:check', async (): Promise<UpdateCheckResult> => {
         autoUpdater.removeListener('error', onErr);
         resolve(result);
       };
-      const onAvail = (info: { version: string; releaseNotes?: string | { note: string }[] | null }) => {
+      const onAvail = (info: { version: string; releaseNotes?: unknown }) => {
         done({
           status: 'available',
           version: info.version,

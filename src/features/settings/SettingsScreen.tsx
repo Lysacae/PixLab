@@ -176,7 +176,7 @@ export function SettingsScreen() {
                           {editing ? (
                             <span className="settings-edit-hint">Appuyez sur une touche…</span>
                           ) : (
-                            <KeyCap>{b.combo}</KeyCap>
+                            <KeyCap label={b.combo} />
                           )}
                           <Button
                             variant="secondary"
