@@ -1,33 +1,47 @@
-# PIXLAB
+# PixLab
 
-Application desktop de montage / gestion **vidéo, image et musique**, interface 100 % pixel art 16-bit.
+Montage **vidéo / image / musique** — UI pixel art 16-bit.
 
-## Stack
+**Version actuelle : [1.0.3](https://github.com/Lysacae/PixLab/releases/tag/v1.0.3)**
 
-- Electron + Vite + React + TypeScript
-- Zustand pour l’état
-- Traitements média stubbés (UI fidèle d’abord)
+| Fichier | Lien |
+|--------|------|
+| Installateur | [PIXLAB-Setup-1.0.3.exe](https://github.com/Lysacae/PixLab/releases/download/v1.0.3/PIXLAB-Setup-1.0.3.exe) |
+| Portable | [PIXLAB-1.0.3-portable.exe](https://github.com/Lysacae/PixLab/releases/download/v1.0.3/PIXLAB-1.0.3-portable.exe) |
 
-## Lancer (dev)
+## 1.0.3 — Ajouts
+- Thème clair
+- Projets `.pxl` (médias embarqués)
+- Preset format vidéo (rouleau)
+- Touche Suppr (clip timeline)
+- Preview noire au ratio d’export
+- Auto-update GitHub
+
+## 1.0.3 — Corrections
+- Splash : barre sous le logo
+- Export vidéo réel (plus de fichier corrompu)
+- Colonne gauche scrollable au resize
+- Texte parasite retiré du cadre preview
+
+## Historique
+
+### 1.0.2
+**Ajouts** — Real-ESRGAN/CUGAN, zoom/pan image, cadre vidéo + molette, trim clips, texte preview, presets HD/2K/4K, marqueurs, popup nouveau projet, updater  
+**Corrections** — WAV, waveform, audio timeline, nom export image
+
+### 1.0.1
+**Ajouts** — App Electron (Vidéo / Image / Musique / Rendu), UI pixel, timeline, file de rendu, Setup + portable
+
+## Dev
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Builds Windows (.exe)
-
 ```bash
 npm run dist
 ```
 
-Sorties dans `release/` :
-- **Installateur** NSIS : `PIXLAB-0.1.0-x64.exe` (installe aussi un **désinstalleur** + raccourci « Desinstaller PIXLAB »)
-- **Portable** (sans installation) : `PIXLAB-0.1.0-portable.exe`
-- **Win unpacked** (test direct) : `release/win-unpacked/PIXLAB.exe`
-
-Scripts : `npm run dist` · `npm run dist:installer` · `npm run dist:portable` · `npm run dist:dir`
-
-## Direction artistique
-
-Voir [`UI Template/SPEC_UI.md`](UI%20Template/SPEC_UI.md).
+Releases : https://github.com/Lysacae/PixLab/releases  
+DA : [`UI Template/SPEC_UI.md`](UI%20Template/SPEC_UI.md)
